@@ -1,0 +1,11 @@
+.BackdropError {
+    position: fixed;
+    background: none!important;
+    width: 70%;
+    left: 15%;
+    top: 40%;
+}
+
+.BackdropError h1 {
+    color: red;
+}

@@ -1,0 +1,18 @@
+h1 {
+    padding: 0;
+    margin: 0;
+    color: rgb(241,241,243);
+    font-size: 50px;
+}
+p {
+    color: rgb(165,172,179);
+    font-size: 18px;
+}
+
+.Grid {
+    margin: auto !important;
+    width: 100%!important;
+    height: 15%!important;
+    box-shadow: none!important;
+    box-sizing: border-box!important;
+}

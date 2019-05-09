@@ -1,0 +1,26 @@
+body > div,
+body > div > div,
+body > div > div > div.login-form {
+    height: 100%;
+    margin: auto;
+}
+
+.SegmentColor {
+    background: none!important;
+    border: 1px solid white !important;
+    border-bottom: none!important;
+    border-bottom-right-radius: 0!important;
+    border-bottom-left-radius: 0!important;
+}
+
+.Grid {
+    height: 85%!important;
+    box-shadow: none!important;
+    box-sizing: border-box!important;
+}
+
+.Button {
+    background-color: white!important;
+    border-top-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+}

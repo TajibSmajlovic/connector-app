@@ -1,0 +1,31 @@
+.Background {
+    background:rgba(255, 255, 255, 0.9)!important;
+    border: 1px solid rgba(217, 236, 240, 0.6)!important;;
+}
+
+.Hover:hover {
+    background-color: rgba(128,128,128, 0.5)!important;
+}
+
+.MenuItem {
+    font-size: 17px!important;
+    font-weight: 700;
+    color: white!important;
+    border-radius: 0!important;
+}
+.MenuItem:visited {
+    font-size: 10px!important;
+}
+
+.PublicWorkspace{
+    font-weight: bold;
+    font-size: 30px;
+}
+.PublicWorkspace span {
+    color: #1e0425;
+}
+
+.PrivateWorkspaceInput input::-webkit-input-placeholder {
+    color: black!important;
+    font-size: 15px;
+}

@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.Logo {
+    display: block;
+    margin: auto auto auto auto;
+    width: 250px;
+    height: 154px;
+}
+
+@media (max-width: 320px) {
+    .Logo {
+        margin: auto;
+    }
+}
