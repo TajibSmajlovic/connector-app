@@ -8,7 +8,7 @@ import {
   Menu,
   Image
 } from "semantic-ui-react";
-import firebase from "../../../../database/firebase";
+import firebase from "../../../database/firebase";
 
 class TodoList extends Component {
   state = {

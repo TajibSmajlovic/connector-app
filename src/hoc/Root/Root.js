@@ -25,10 +25,11 @@ const AsyncBackdrop = AsyncComponent(() => {
 class Root extends Component {
   // When user is logged in path is changed to '/' which is apps dashboard.
   componentDidMount() {
+    console.log(this.props);
     firebase.auth().onAuthStateChanged(user => {
-      if (this.props.workspace.workspace || user) {
+      if (this.props.workspace.workspace && user) {
         this.props.setUser(user);
-        this.props.history.replace("/");
+        this.props.history.push("/");
       } else {
         firebase.auth().signOut();
         this.props.history.replace("/workspace");

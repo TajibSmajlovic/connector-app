@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Grid, Header, Dropdown, Image } from "semantic-ui-react";
-import { withRouter } from "react-router";
 
 import firebase from "../../../../database/firebase";
 
@@ -72,4 +71,4 @@ class UserPanel extends Component {
   }
 }
 
-export default withRouter(UserPanel);
+export default UserPanel;

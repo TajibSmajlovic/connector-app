@@ -2,13 +2,12 @@ import React from "react";
 import { Grid } from "semantic-ui-react";
 import { connect } from "react-redux";
 
-import "./Connector.module.css";
 import styles from "./Connector.module.css";
 import SidePanel from "./SidePanel/SidePanel";
 import Messages from "./Messages/Messages";
 import InfoPanel from "./InfoPanel/InfoPanel";
-import TodoList from "./InfoPanel/TodoList/TodoList";
-import Calendar from "./Calendar/Calendar";
+import TodoList from "./TodoList/TodoList";
+// import Calendar from "./Calendar/Calendar";
 
 const Connector = ({
   currentUser,
@@ -33,7 +32,6 @@ const Connector = ({
         workspace={workspace}
         currentUser={currentUser}
       />
-      <Calendar />
     </Grid.Column>
 
     <Grid.Column style={{ width: "58vw" }} className={styles.Test}>
