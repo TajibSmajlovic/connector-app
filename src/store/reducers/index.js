@@ -43,7 +43,8 @@ const userReducer = (state = initialUserState, action) => {
 // Sets initial current room to null
 const initialRoomState = {
   currentRoom: null,
-  isPrivateMessage: false
+  isPrivateMessage: false,
+  userPosts: null
 };
 
 const roomReducer = (state = initialRoomState, action) => {
@@ -57,6 +58,11 @@ const roomReducer = (state = initialRoomState, action) => {
       return {
         ...state,
         isPrivateMessage: action.payload.isPrivateMessage
+      };
+    case actionType.SET_USER_POSTS:
+      return {
+        ...state,
+        userPosts: action.payload.userPosts
       };
     default:
       return state;

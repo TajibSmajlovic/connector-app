@@ -5,7 +5,7 @@ import uuidv4 from "uuid/v4"; // Creates a random string
 
 import styles from "./MessageBody.module.css";
 import firebase from "../../../../database/firebase";
-import FileModal from "./FileModal/FileModal";
+import UploadFileModal from "./UploadFileModal/UploadFileModal";
 import ProgressBar from "../../../../components/UI/ProgressBar/ProgressBar";
 
 class MessageBody extends React.Component {
@@ -209,14 +209,7 @@ class MessageBody extends React.Component {
 
   render() {
     // Destructuring from state
-    const {
-      errors,
-      message,
-      loading,
-      modal,
-      uploadState,
-      percentUploaded
-    } = this.state;
+    const { errors, message, modal, uploadState, percentUploaded } = this.state;
 
     return (
       <Segment clearing className={styles.SegmentColor}>
@@ -250,7 +243,7 @@ class MessageBody extends React.Component {
             icon="location arrow"
           />
         </Button.Group>
-        <FileModal
+        <UploadFileModal
           modal={modal}
           closeModal={this.closeModal}
           uploadFile={this.uploadFile}

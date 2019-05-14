@@ -1,7 +1,14 @@
 import React, { Component } from "react";
-import { Segment, Accordion, Header, Icon, Image } from "semantic-ui-react";
+import {
+  Segment,
+  Accordion,
+  Header,
+  Icon,
+  Image,
+  List
+} from "semantic-ui-react";
 
-class MetaPanel extends Component {
+class InfoPanel extends Component {
   state = {
     activeIndex: 0
   };
@@ -13,9 +20,32 @@ class MetaPanel extends Component {
     this.setState({ activeIndex: newIndex });
   };
 
+  // Using Object.entries on prop value of userPosts with sorting and mapping every posts that is on global state, return list with correct data.
+  displayTopPosters = posts =>
+    Object.entries(posts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([key, val], i) => (
+        <List.Item key={i}>
+          <Image avatar src={val.avatar} />
+          <List.Content>
+            <List.Header as="a">{key}</List.Header>
+            <List.Description>{this.format(val.count)}</List.Description>
+          </List.Content>
+        </List.Item>
+      ))
+      .slice(0, 5);
+
+  format = num => {
+    if (num > 1 || num === 0) {
+      return `${num} posts`;
+    } else {
+      return `${num} post`;
+    }
+  };
+
   render() {
     const { activeIndex } = this.state;
-    const { privateMessage, currentRoom } = this.props;
+    const { privateMessage, currentRoom, userPosts } = this.props;
 
     if (privateMessage || !currentRoom) {
       return null;
@@ -47,10 +77,10 @@ class MetaPanel extends Component {
           >
             <Icon name="dropdown" />
             <Icon name="user circle" />
-            Top Posters
+            Most Active Users
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 1}>
-            posters
+            <List>{userPosts && this.displayTopPosters(userPosts)}</List>
           </Accordion.Content>
 
           <Accordion.Title
@@ -79,4 +109,4 @@ class MetaPanel extends Component {
   }
 }
 
-export default MetaPanel;
+export default InfoPanel;

@@ -16,3 +16,12 @@ export const setPrivateMessage = isPrivateMessage => {
     payload: { isPrivateMessage }
   };
 };
+
+export const setUserPosts = userPosts => {
+  return {
+    type: actionType.SET_USER_POSTS,
+    payload: {
+      userPosts
+    }
+  };
+};

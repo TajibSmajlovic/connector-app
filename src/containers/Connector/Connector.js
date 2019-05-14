@@ -13,7 +13,8 @@ const Connector = ({
   currentUser,
   currentRoom,
   isPrivateMessage,
-  workspace
+  workspace,
+  userPosts
 }) => (
   <Grid
     columns="equal"
@@ -25,6 +26,7 @@ const Connector = ({
         privateMessage={isPrivateMessage}
         currentRoom={currentRoom}
         key={currentUser && currentUser.uid}
+        userPosts={userPosts}
       />
       <TodoList
         currentRoom={currentRoom}
@@ -59,7 +61,8 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
   currentRoom: state.room.currentRoom,
   isPrivateMessage: state.room.isPrivateMessage,
-  workspace: state.workspace
+  workspace: state.workspace,
+  userPosts: state.room.userPosts
 });
 
 export default connect(mapStateToProps)(Connector);

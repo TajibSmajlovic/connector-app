@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { setUserPosts } from "../../../store/actions/roomActions";
 import { Segment, Comment } from "semantic-ui-react";
 import firebase from "../../../database/firebase";
 
@@ -45,6 +47,13 @@ class Messages extends Component {
     }
   }
 
+  // Every time a new message is sent, it will automatically scroll to bottom
+  componentDidUpdate(prevProps, prevState) {
+    if (this.messagesEnd) {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   // Loaded messages will be stored first in loadedMessages[], then it will be stored in global state messages[]
   messageListener = roomId => {
     let loadedMessages = [];
@@ -57,6 +66,7 @@ class Messages extends Component {
         messagesLoading: false
       });
       this.countUniqueUsers(loadedMessages);
+      this.countUserPosts(loadedMessages);
     });
   };
 
@@ -180,6 +190,22 @@ class Messages extends Component {
     }
   };
 
+  // Calculates how many messages each user has sent in a Room
+  countUserPosts = messages => {
+    let userPosts = messages.reduce((acc, message) => {
+      if (message.user.name in acc) {
+        acc[message.user.name].count += 1;
+      } else {
+        acc[message.user.name] = {
+          avatar: message.user.avatar,
+          count: 1
+        };
+      }
+      return acc;
+    }, {});
+    this.props.setUserPosts(userPosts);
+  };
+
   render() {
     // Destructuring
     const {
@@ -219,6 +245,7 @@ class Messages extends Component {
         <Segment clearing style={{ marginBottom: 0 }}>
           <Comment.Group style={{ maxWidth: "70vw" }} className={style.message}>
             {displayMessages()}
+            <div ref={node => (this.messagesEnd = node)} />
           </Comment.Group>
           <MessageBody
             workspace={workspace}
@@ -234,4 +261,7 @@ class Messages extends Component {
   }
 }
 
-export default Messages;
+export default connect(
+  null,
+  { setUserPosts }
+)(Messages);

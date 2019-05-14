@@ -2,13 +2,21 @@ import React, { Component } from "react";
 import { Grid, Header, Dropdown, Image } from "semantic-ui-react";
 
 import firebase from "../../../../database/firebase";
+import ChangeAvatarModal from "./ChangeAvatarModal/ChangeAvatarModal";
 
 class UserPanel extends Component {
-  // Receiving value of current global user and sets that value to dropdown
   state = {
-    user: this.props.currentUser
+    user: this.props.currentUser, // Receiving value of current global user and sets that value to dropdown
+    modal: false
   };
 
+  componentDidMount() {}
+
+  // Opening and closing modal
+  openModal = () => this.setState({ modal: true });
+  closeModal = () => this.setState({ modal: false });
+
+  // Dropdown options
   dropdownOptions = () => [
     {
       key: "user",
@@ -21,7 +29,7 @@ class UserPanel extends Component {
     },
     {
       key: "avatar",
-      text: <span>Change Avatar</span>
+      text: <span onClick={this.openModal}>Change Avatar</span>
     },
     {
       key: "signout",
@@ -29,6 +37,7 @@ class UserPanel extends Component {
     }
   ];
 
+  // Method for signing out
   signOut = () => {
     firebase
       .auth()
@@ -37,6 +46,8 @@ class UserPanel extends Component {
   };
 
   render() {
+    const { modal, user } = this.state;
+
     return (
       <Grid>
         <Grid.Column textAlign="center">
@@ -65,6 +76,11 @@ class UserPanel extends Component {
               }
             />
           </Header>
+          <ChangeAvatarModal
+            modal={modal}
+            currentUser={user}
+            closeModal={this.closeModal}
+          />
         </Grid.Column>
       </Grid>
     );

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import mime from "mime-types"; // Looks at file extension
 import { Modal, Input, Button, Icon } from "semantic-ui-react";
 
-class FileModal extends Component {
+class UploadFileModal extends Component {
   state = {
     file: null,
     authorized: ["image/jpeg", "image/png", "pdf/pdf"]
@@ -66,4 +66,4 @@ class FileModal extends Component {
   }
 }
 
-export default FileModal;
+export default UploadFileModal;
