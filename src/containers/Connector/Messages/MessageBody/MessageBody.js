@@ -1,9 +1,12 @@
 import React from "react";
 import { Button, Input, Segment } from "semantic-ui-react";
 import { geolocated } from "react-geolocated";
+import { Picker, emojiIndex } from "emoji-mart";
 import uuidv4 from "uuid/v4"; // Creates a random string
 
+import "emoji-mart/css/emoji-mart.css";
 import styles from "./MessageBody.module.css";
+
 import firebase from "../../../../database/firebase";
 import UploadFileModal from "./UploadFileModal/UploadFileModal";
 import ProgressBar from "../../../../components/UI/ProgressBar/ProgressBar";
@@ -19,7 +22,8 @@ class MessageBody extends React.Component {
     user: this.props.currentUser,
     loading: false,
     errors: [],
-    modal: false
+    modal: false,
+    emoji: false
   };
 
   // Method for opening and closing modal
@@ -29,6 +33,34 @@ class MessageBody extends React.Component {
   // Taking the input
   inputHandler = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  handleEmojiButton = () => {
+    this.setState({ emoji: !this.state.emoji });
+  };
+
+  handleAddEmoji = emoji => {
+    const oldMessage = this.state.message;
+
+    const newMessage = this.colonToUnicode(` ${oldMessage} ${emoji.colons} `);
+    this.setState({ message: newMessage, emoji: false });
+    setTimeout(() => this.messageInputRef.focus(), 0);
+  };
+
+  // Converts emoji value to unicode
+  colonToUnicode = message => {
+    return message.replace(/:[A-Za-z0-9_+-]+:/g, x => {
+      x = x.replace(/:/g, "");
+      let emoji = emojiIndex.emojis[x];
+      if (typeof emoji !== "undefined") {
+        let unicode = emoji.native;
+        if (typeof unicode !== "undefined") {
+          return unicode;
+        }
+      }
+      x = ":" + x + ":";
+      return x;
+    });
   };
 
   // Creating a message object
@@ -209,20 +241,44 @@ class MessageBody extends React.Component {
 
   render() {
     // Destructuring from state
-    const { errors, message, modal, uploadState, percentUploaded } = this.state;
+    const {
+      errors,
+      message,
+      modal,
+      uploadState,
+      percentUploaded,
+      emoji
+    } = this.state;
 
     return (
       <Segment clearing className={styles.SegmentColor}>
+        {emoji && (
+          <Picker
+            style={{ position: "absolute", bottom: 100, left: 10 }}
+            onSelect={this.handleAddEmoji}
+            set="apple"
+            title="Select your emoji"
+            emoji="point_up"
+          />
+        )}
+
         <Input
           fluid
           size="large"
-          onKeyDown={this.send}
           autoComplete="off"
           name="message"
           value={message}
-          label={<Button icon={"smile"} />}
+          ref={node => (this.messageInputRef = node)}
+          label={
+            <Button
+              icon={emoji ? "close" : "smile"}
+              content={emoji ? "close" : null}
+              onClick={this.handleEmojiButton}
+            />
+          }
           labelPosition="left"
           placeholder="Write your message"
+          onKeyDown={this.send}
           error={errors.some(error => error.message.includes("message"))}
           onChange={this.inputHandler}
         />

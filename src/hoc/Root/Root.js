@@ -27,7 +27,7 @@ class Root extends Component {
   componentDidMount() {
     console.log(this.props);
     firebase.auth().onAuthStateChanged(user => {
-      if (this.props.workspace.workspace && user) {
+      if (this.props.workspace.workspace || user) {
         this.props.setUser(user);
         this.props.history.push("/");
       } else {
