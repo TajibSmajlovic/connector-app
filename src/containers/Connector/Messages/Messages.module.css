@@ -2,3 +2,9 @@
     height: 69vh;
     overflow-y: scroll;
 }
+
+.UserTyping {
+    font-style: italic;
+    font-weight: bold;
+    margin-right: 3px;
+}

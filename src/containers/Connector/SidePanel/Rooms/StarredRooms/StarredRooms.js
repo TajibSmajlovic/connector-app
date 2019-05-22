@@ -23,6 +23,10 @@ class StarredRoom extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.state.usersRef.child(`${this.state.user.uid}/starred`).off();
+  }
+
   // Listening for adding/removing starredRooms
   displayStarredRoomsListener = userID => {
     this.state.usersRef

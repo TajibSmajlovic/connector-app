@@ -183,7 +183,7 @@ class Workspace extends Component {
     } else {
       workspace = (
         <Segment textAlign="left">
-          <Form>
+          <Form style={{ maxWidth: "95%", margin: "2% auto" }}>
             <Form.Field>
               <Checkbox onChange={this.toggle} label="Private Workspace?" />
             </Form.Field>
@@ -239,9 +239,7 @@ class Workspace extends Component {
             />
           </Menu>
 
-          <Segment className={styles.Background} attached="bottom">
-            {workspace}
-          </Segment>
+          <Segment attached="bottom">{workspace}</Segment>
         </Grid.Column>
       </Grid>
     );

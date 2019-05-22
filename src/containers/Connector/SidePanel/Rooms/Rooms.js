@@ -33,6 +33,9 @@ class Rooms extends Component {
     messagesRef: firebase
       .database()
       .ref(`${this.props.workspace.workspace}/messages`),
+    typingRef: firebase
+      .database()
+      .ref(`${this.props.workspace.workspace}/typing`),
     notifications: [],
     modal: false,
     willingToRelocate: false,
@@ -45,13 +48,13 @@ class Rooms extends Component {
 
   // Unmounting all listeners when we are on a different route (ex: '/login')
   componentWillUnmount() {
-    this.removeworkspaceRooms();
-  }
-
-  // Turning off firebase roomRef
-  removeworkspaceRooms = () => {
+    // Turning off firebase
     this.state.roomRef.off();
-  };
+
+    this.state.rooms.forEach(room => {
+      this.state.messagesRef.child(room.id).off();
+    });
+  }
 
   workspaceRooms = () => {
     let loadedRooms = [];
@@ -127,10 +130,19 @@ class Rooms extends Component {
   // Sets current room
   changeRoom = room => {
     this.setActiveRoom(room);
+    this.clearTyping();
     this.clearNotifications();
     this.props.setCurrentRoom(room);
     this.props.setPrivateMessage(false);
     this.setState({ room });
+  };
+
+  // Clear typing collection
+  clearTyping = () => {
+    this.state.typingRef
+      .child(this.state.room.id)
+      .child(this.state.user.uid)
+      .remove();
   };
 
   // Sets active room

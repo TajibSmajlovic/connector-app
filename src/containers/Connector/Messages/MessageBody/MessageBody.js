@@ -14,6 +14,9 @@ import ProgressBar from "../../../../components/UI/ProgressBar/ProgressBar";
 class MessageBody extends React.Component {
   state = {
     storageRef: firebase.storage().ref(),
+    typingRef: firebase
+      .database()
+      .ref(`${this.props.workspace.workspace}/typing`),
     uploadTask: null,
     uploadState: "",
     percentUploaded: 0,
@@ -25,6 +28,14 @@ class MessageBody extends React.Component {
     modal: false,
     emoji: false
   };
+
+  componentWillUnmount() {
+    if (this.state.uploadTask !== null) {
+      this.state.uploadTask.cancel();
+      this.setState({ uploadTask: null });
+    }
+    console.log(this.props.workspace.workspace);
+  }
 
   // Method for opening and closing modal
   openModal = () => this.setState({ modal: true });
@@ -87,7 +98,7 @@ class MessageBody extends React.Component {
   sendMessage = () => {
     // Destructuring
     const { getMessageRef } = this.props;
-    const { message, room } = this.state;
+    const { message, room, user, typingRef } = this.state;
 
     // If there is a message, a message object which is created by createMessage(), will be set in the database with the corresponding reference (workspace/messages/...)
     if (message) {
@@ -98,6 +109,10 @@ class MessageBody extends React.Component {
         .set(this.createMessage())
         .then(() => {
           this.setState({ loading: false, message: "", errors: [] });
+          typingRef
+            .child(room.id)
+            .child(user.uid)
+            .remove();
         })
         .catch(err => {
           this.setState({
@@ -233,9 +248,23 @@ class MessageBody extends React.Component {
       });
   };
 
-  send = event => {
+  typingHandler = event => {
     if (event.keyCode === 13) {
       this.sendMessage();
+    }
+
+    const { message, typingRef, room, user } = this.state;
+
+    if (message) {
+      typingRef
+        .child(room.id)
+        .child(user.uid)
+        .set(user.displayName);
+    } else {
+      typingRef
+        .child(room.id)
+        .child(user.uid)
+        .remove();
     }
   };
 
@@ -278,7 +307,7 @@ class MessageBody extends React.Component {
           }
           labelPosition="left"
           placeholder="Write your message"
-          onKeyDown={this.send}
+          onKeyDown={this.typingHandler}
           error={errors.some(error => error.message.includes("message"))}
           onChange={this.inputHandler}
         />

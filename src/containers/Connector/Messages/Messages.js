@@ -9,6 +9,7 @@ import Aux from "../../../hoc/Auxiliary/Auxiliary";
 import MessageHeader from "./MessageHeader/MessageHeader";
 import MessageBody from "./MessageBody/MessageBody";
 import Message from "../../../components/Message/Mesage";
+import TypingAnimation from "./MessageBody/TypingAnimation/TypingAnimation";
 
 class Messages extends Component {
   state = {
@@ -22,6 +23,9 @@ class Messages extends Component {
     usersRef: firebase
       .database()
       .ref(`${this.props.workspace.workspace}/starredRooms`),
+    typingRef: firebase
+      .database()
+      .ref(`${this.props.workspace.workspace}/typing`),
     messages: [],
     messagesLoading: true,
     room: this.props.currentRoom,
@@ -30,7 +34,9 @@ class Messages extends Component {
     numberOfUniqueUsers: null,
     search: "",
     searchLoading: false,
-    searchResults: []
+    searchResults: [],
+    listeners: [],
+    typingUsers: []
   };
 
   componentDidMount() {
@@ -44,6 +50,7 @@ class Messages extends Component {
       console.log(this.state.messagesRef);
       console.log(this.state.privateMessagesRef);*/
       this.addStarredListener(room.id, user.uid);
+      this.addTypingListeners(room.id);
     }
   }
 
@@ -53,6 +60,8 @@ class Messages extends Component {
       this.messagesEnd.scrollIntoView({ behavior: "smooth" });
     }
   }
+
+  componentWillUnmount() {}
 
   // Loaded messages will be stored first in loadedMessages[], then it will be stored in global state messages[]
   messageListener = roomId => {
@@ -84,6 +93,30 @@ class Messages extends Component {
         }
       });
   };
+
+  // Function for managing users that are typing
+  addTypingListeners = roomId => {
+    let typingUsers = [];
+
+    this.state.typingRef.child(roomId).on("child_added", snap => {
+      if (snap.key !== this.state.user.uid) {
+        typingUsers = typingUsers.concat({
+          id: snap.key,
+          name: snap.val()
+        });
+        this.setState({ typingUsers });
+      }
+    });
+
+    this.state.typingRef.child(roomId).on("child_removed", snap => {
+      const index = typingUsers.findIndex(user => user.id === snap.key);
+      if (index !== -1) {
+        typingUsers = typingUsers.filter(user => user.id !== snap.key);
+        this.setState({ typingUsers });
+      }
+    });
+  };
+
   // Method for how many "active" users are in a room.
   countUniqueUsers = messages => {
     const uniqueUsers = messages.reduce((accumulator, message) => {
@@ -206,6 +239,25 @@ class Messages extends Component {
     this.props.setUserPosts(userPosts);
   };
 
+  // Function for displaying animations and name of the user which is typing
+  displayTypingUsers = users => {
+    if (users.length > 0) {
+      return users.map(user => (
+        <div
+          key={user.id}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "0.2em"
+          }}
+        >
+          <span className={style.UserTyping}>{user.name} is typing</span>{" "}
+          <TypingAnimation />
+        </div>
+      ));
+    }
+  };
+
   render() {
     // Destructuring
     const {
@@ -218,7 +270,8 @@ class Messages extends Component {
       searchResults,
       searchLoading,
       privateMessage,
-      isRoomStarred
+      isRoomStarred,
+      typingUsers
     } = this.state;
     const { workspace } = this.props;
 
@@ -245,6 +298,7 @@ class Messages extends Component {
         <Segment clearing style={{ marginBottom: 0 }}>
           <Comment.Group style={{ maxWidth: "70vw" }} className={style.message}>
             {displayMessages()}
+            {this.displayTypingUsers(typingUsers)}
             <div ref={node => (this.messagesEnd = node)} />
           </Comment.Group>
           <MessageBody

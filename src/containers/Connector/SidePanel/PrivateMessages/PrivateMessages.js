@@ -26,6 +26,11 @@ class PrivateMessages extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.state.usersRef.off();
+    this.state.presenceRef.off();
+  }
+
   privateMessages = currentUserUid => {
     let loadedUsers = [];
     // All users from database 'ref' will be added to users[]
