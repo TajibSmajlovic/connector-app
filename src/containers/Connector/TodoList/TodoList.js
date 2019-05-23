@@ -116,7 +116,11 @@ class TodoList extends Component {
         </Menu.Item>
       ));
     } else {
-      return <Menu.Item>No Todos! Create a new one...</Menu.Item>;
+      return (
+        <Menu.Item style={{ fontWeight: "bold", textAlign: "center" }}>
+          No Todos! Create a new one...
+        </Menu.Item>
+      );
     }
   };
 
@@ -139,6 +143,7 @@ class TodoList extends Component {
               placeholder="Write ToDo"
               labelPosition="right"
               maxLength="30"
+              autoComplete="off"
               label={<Button onClick={this.addTodo} icon="edit" />}
               onChange={this.inputHandler}
             />

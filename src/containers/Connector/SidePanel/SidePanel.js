@@ -17,7 +17,7 @@ class SidePanel extends Component {
         fixed="right"
         vertical
         style={{
-          background: "#181f2d",
+          background: "#152336",
           fontSize: "1,2rem",
           width: "inherit",
           padding: 0

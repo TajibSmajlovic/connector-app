@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import { Loader } from "semantic-ui-react";
 
+// import Workspace from "../../containers/Workspace/Workspace";
+
 import firebase from "../../database/firebase";
 import AsyncComponent from "../../hoc/AsyncComponent/AsyncComponent";
 
@@ -25,9 +27,8 @@ const AsyncBackdrop = AsyncComponent(() => {
 class Root extends Component {
   // When user is logged in path is changed to '/' which is apps dashboard.
   componentDidMount() {
-    console.log(this.props);
     firebase.auth().onAuthStateChanged(user => {
-      if (this.props.workspace.workspace || user) {
+      if (this.props.workspace.workspace && user) {
         this.props.setUser(user);
         this.props.history.push("/");
       } else {
@@ -35,6 +36,12 @@ class Root extends Component {
         this.props.history.replace("/workspace");
         this.props.clearUser();
       }
+    });
+
+    window.addEventListener("beforeunload", ev => {
+      ev.preventDefault();
+      firebase.auth().signOut();
+      this.props.clearUser();
     });
   }
 
@@ -44,13 +51,7 @@ class Root extends Component {
   });
 
   render() {
-    return this.props.isLoading ? (
-      <AsyncBackdrop show={this.props.isLoading}>
-        <Loader active={this.props.isLoading} size="huge">
-          <p>Preparing Connector...</p>
-        </Loader>
-      </AsyncBackdrop>
-    ) : (
+    return (
       <Switch>
         <Route path="/" exact component={AsyncConnector} />
         <Route path="/register" component={AsyncRegister} />
@@ -60,5 +61,4 @@ class Root extends Component {
     );
   }
 }
-
 export default Root;

@@ -52,6 +52,10 @@ class Messages extends Component {
       this.addStarredListener(room.id, user.uid);
       this.addTypingListeners(room.id);
     }
+
+    if (this.messagesEnd) {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   // Every time a new message is sent, it will automatically scroll to bottom

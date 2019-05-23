@@ -176,7 +176,7 @@ class MessageBody extends React.Component {
   // Setting path for private as well as public messages when uploading files
   getPath = () => {
     if (this.props.privateMessage) {
-      return `chat/private-${this.state.room.id}`;
+      return `chat/private/${this.state.room.id}`;
     } else {
       return "chat/public";
     }

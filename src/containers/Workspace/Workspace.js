@@ -7,14 +7,17 @@ import {
   List,
   Form,
   Checkbox,
-  Button
+  Button,
+  Dimmer,
+  Loader
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import firebase from "../../database/firebase";
 
 import styles from "./Workspace.module.css";
 import { setWorkspace } from "../../store/actions/workspaceActions";
-import Loader from "../../components/UI/Loader/Loader";
+import Aux from "../../hoc/Auxiliary/Auxiliary";
+import Logo from "../../components/UI/Logo/Logo";
 
 class Workspace extends Component {
   state = {
@@ -99,7 +102,7 @@ class Workspace extends Component {
               {" "}
               <span>
                 <List.Icon name="globe" />
-                {work.name} workspace
+                {work.name}
               </span>
             </List.Item>
           </List>
@@ -117,7 +120,7 @@ class Workspace extends Component {
               style={{ color: "#1e0425", fontWeight: "bold", fontSize: 30 }}
             >
               <List.Icon name="lock" />
-              {work.name} workspace
+              {work.name}
             </List.Item>
             <List.Item>
               <Input
@@ -169,17 +172,9 @@ class Workspace extends Component {
     });
 
     if (this.state.activeItem === "PUBLIC") {
-      if (publicWork.length === 0) {
-        workspace = <Loader />;
-      } else {
-        workspace = this.displayPublicWorkplaces(workspaces);
-      }
+      workspace = this.displayPublicWorkplaces(workspaces);
     } else if (this.state.activeItem === "PRIVATE") {
-      if (privateWork.length === 0) {
-        workspace = <Loader />;
-      } else {
-        workspace = this.displayPrivateWorkplaces(workspaces);
-      }
+      workspace = this.displayPrivateWorkplaces(workspaces);
     } else {
       workspace = (
         <Segment textAlign="left">
@@ -209,39 +204,48 @@ class Workspace extends Component {
       );
     }
 
-    return (
-      <Grid columns="two" divided textAlign="center">
-        <Grid.Column>
-          <Menu attached="top" tabular>
-            <Menu.Item
-              className={styles.MenuItem}
-              name="PUBLIC"
-              icon="globe"
-              color="grey"
-              active={activeItem === "PUBLIC"}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              className={styles.MenuItem}
-              color="grey"
-              name="PRIVATE"
-              icon="lock"
-              active={activeItem === "PRIVATE"}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name="CREATE"
-              color="grey"
-              position="right"
-              active={activeItem === "CREATE"}
-              onClick={this.handleItemClick}
-              className={styles.MenuItem}
-            />
-          </Menu>
+    return publicWork.length > 0 ? (
+      <Aux>
+        <Logo />
+        <Grid columns="two" textAlign="center">
+          <Grid.Row>
+            <Grid.Column>
+              <Menu attached="top" tabular>
+                <Menu.Item
+                  className={styles.MenuItem}
+                  name="PUBLIC"
+                  icon="globe"
+                  color="grey"
+                  active={activeItem === "PUBLIC"}
+                  onClick={this.handleItemClick}
+                />
+                <Menu.Item
+                  className={styles.MenuItem}
+                  color="grey"
+                  name="PRIVATE"
+                  icon="lock"
+                  active={activeItem === "PRIVATE"}
+                  onClick={this.handleItemClick}
+                />
+                <Menu.Item
+                  name="CREATE"
+                  color="grey"
+                  position="right"
+                  active={activeItem === "CREATE"}
+                  onClick={this.handleItemClick}
+                  className={styles.MenuItem}
+                />
+              </Menu>
 
-          <Segment attached="bottom">{workspace}</Segment>
-        </Grid.Column>
-      </Grid>
+              <Segment attached="bottom">{workspace}</Segment>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Aux>
+    ) : (
+      <Dimmer active>
+        <Loader size="huge">Preparing Connector...</Loader>
+      </Dimmer>
     );
   }
 }

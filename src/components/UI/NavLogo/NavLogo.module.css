@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.NavLogo {
+    display: block;
+    margin: 0;
+    height: 50px;
+}
+
+@media (max-width: 320px) {
+    .Logo {
+        margin: auto;
+    }
+}

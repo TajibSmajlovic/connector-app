@@ -114,7 +114,7 @@ class PrivateMessages extends Component {
     const { users, activePrivateMessage } = this.state;
 
     return (
-      <Menu.Menu>
+      <Menu.Menu style={{ height: 450, overflow: "auto" }}>
         <Menu.Item
           style={{ fontWeight: "bold", fontSize: 18, textAlign: "center" }}
         >

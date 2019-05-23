@@ -251,7 +251,9 @@ class Rooms extends Component {
       ));
     } else {
       return (
-        <Menu.Item style={{ fontSize: 15 }}>
+        <Menu.Item
+          style={{ fontSize: 15, fontWeight: "bold", textAlign: "center" }}
+        >
           No rooms! Create a new one...
         </Menu.Item>
       );
@@ -280,7 +282,7 @@ class Rooms extends Component {
             />
           </Menu.Item>
           <Menu.Item />
-          <div style={{ height: 250, overflow: "auto" }}>
+          <div style={{ height: 300, overflow: "auto" }}>
             {this.displayRooms(rooms)}
           </div>
         </Menu.Menu>

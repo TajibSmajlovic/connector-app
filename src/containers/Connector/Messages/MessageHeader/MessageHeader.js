@@ -26,7 +26,7 @@ class MessagesHeader extends Component {
             ) : (
               ""
             )}{" "}
-            <span style={{ textDecoration: "underline" }}>{roomName}</span>
+            <span>{roomName}</span>
           </span>
           {!privateMessage ? (
             <Header.Subheader>{numUniqueUsers}</Header.Subheader>

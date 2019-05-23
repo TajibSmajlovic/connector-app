@@ -4,10 +4,10 @@
 }
 
 .Logo {
-    display: block;
-    margin: auto auto auto auto;
-    width: 250px;
-    height: 154px;
+    display: block !important;
+    margin: 25px auto !important;
+    width: 250px !important;
+    height: 154px !important;
 }
 
 @media (max-width: 320px) {
