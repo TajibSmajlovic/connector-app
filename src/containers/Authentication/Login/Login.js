@@ -78,6 +78,15 @@ class Login extends Component {
     }
   };
 
+  test() {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(signedInUser => {
+        console.log(signedInUser);
+      });
+  }
+
   isFormValid = ({ email, password }) => email && password;
 
   render() {

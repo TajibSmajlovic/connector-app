@@ -35,25 +35,28 @@ class Root extends Component {
         firebase.auth().signOut();
         this.props.history.replace("/workspace");
         this.props.clearUser();
-      }
-    });
 
-    window.addEventListener("beforeunload", ev => {
-      ev.preventDefault();
-      firebase.auth().signOut();
-      this.props.clearUser();
+        //window.addEventListener("beforeunload", ev => {
+        //ev.preventDefault();
+        //firebase.auth().signOut();
+        //this.props.clearUser();
+        //});
+      }
     });
   }
 
   static mapStateFromPros = state => ({
     isLoading: state.user.isLoading,
-    workspace: state.workspace
+    workspace: state.workspace,
+    user: state.user.currentUser
   });
 
   render() {
     return (
       <Switch>
-        <Route path="/" exact component={AsyncConnector} />
+        {this.props.user ? (
+          <Route path="/" exact component={AsyncConnector} />
+        ) : null}
         <Route path="/register" component={AsyncRegister} />
         <Route path="/login" component={AsyncLogin} />
         <Route path="/workspace" component={AsyncWorkspace} />

@@ -3,9 +3,13 @@ import { Menu, Icon, Image } from "semantic-ui-react";
 import { connect } from "react-redux";
 import {
   setCurrentRoom,
-  setPrivateMessage
+  setPrivateMessage,
+  fetchUsers
 } from "../../../../store/actions/index";
+
 import firebase from "../../../../database/firebase";
+
+import Aux from "../../../../hoc/Auxiliary/Auxiliary";
 
 class PrivateMessages extends Component {
   state = {
@@ -17,18 +21,31 @@ class PrivateMessages extends Component {
       .ref(`${this.props.workspace.workspace}/users`),
     presenceRef: firebase
       .database()
-      .ref(`${this.props.workspace.workspace}/presence`)
+      .ref(`${this.props.workspace.workspace}/presence`),
+    connectedRef: firebase
+      .database()
+      .ref(`.info/${this.props.workspace.workspace}/connected`)
   };
 
   componentDidMount() {
     if (this.state.user) {
       this.privateMessages(this.state.user.uid);
+      this.state.presenceRef.child(this.state.user.uid).set(true);
     }
+    this.state.presenceRef
+      .child(this.state.user.uid)
+      .onDisconnect()
+      .remove();
   }
-
   componentWillUnmount() {
     this.state.usersRef.off();
     this.state.presenceRef.off();
+    this.state.connectedRef.off();
+
+    this.state.presenceRef
+      .child(this.state.user.uid)
+      .onDisconnect()
+      .remove();
   }
 
   privateMessages = currentUserUid => {
@@ -40,13 +57,15 @@ class PrivateMessages extends Component {
         loadedUser["uid"] = user.key;
         loadedUser["status"] = "offline";
         loadedUsers.push(loadedUser);
-        this.setState({ users: loadedUsers });
       }
     });
 
-    // Listening in change of value of users and updating '/presence' ref.
-    this.state.usersRef.on("value", user => {
-      if (user.val()) {
+    this.props.fetchUsers(loadedUsers);
+
+    /* // Listening in change of value of users and updating '/presence' ref.
+    this.state.connectedRef.on("value", user => {
+      if (user.val() === true) {
+        console.log(user.val());
         const ref = this.state.presenceRef.child(currentUserUid);
         ref.set(true);
         ref.onDisconnect().remove(err => {
@@ -56,8 +75,8 @@ class PrivateMessages extends Component {
         });
       }
     });
-
-    // Setting status to online when user enters
+*/
+    /*  // Setting status to online when user enters
     this.state.presenceRef.on("child_added", user => {
       if (currentUserUid !== user.key) {
         this.addStatusToUser(user.key);
@@ -74,16 +93,18 @@ class PrivateMessages extends Component {
 
   // Adding status to users
   addStatusToUser = (userId, connected = true) => {
-    const updatedUsers = this.state.users.reduce((accumulator, user) => {
+    const updatedUsers = this.props.users.reduce((accumulator, user) => {
       if (user.uid === userId) {
         user["status"] = `${connected ? "online" : "offline"}`;
       }
       return accumulator.concat(user);
-    }, []);
-    this.setState({ users: updatedUsers });
+    }, []);*/
+    /*
+    console.log(updatedUsers);
+    this.props.fetchUsers(updatedUsers);*/
   };
 
-  isUserOnline = user => user.status === "online";
+  /*isUserOnline = user => user.status === "online";*/
 
   setActivePrivateMessage = userId => {
     this.setState({ activePrivateMessage: userId });
@@ -113,38 +134,49 @@ class PrivateMessages extends Component {
   render() {
     const { users, activePrivateMessage } = this.state;
 
+    console.log(this.props.users);
+
+    let pUsers = this.props.users;
+
     return (
-      <Menu.Menu style={{ height: 450, overflow: "auto" }}>
+      <Aux>
         <Menu.Item
           style={{ fontWeight: "bold", fontSize: 18, textAlign: "center" }}
         >
+          {" "}
           <span>
             <Icon name="facebook messenger" /> PRIVATE MESSAGES
-          </span>{" "}
-          ({users.length})
+          </span>
+          ({pUsers.length})
         </Menu.Item>
-        {users.map(user => (
-          <Menu.Item
-            key={user.uid}
-            active={user.uid === activePrivateMessage}
-            onClick={() => this.privateMessage(user)}
-            style={{ fontStyle: "italic", fontSize: 18 }}
-          >
-            <Icon
-              name="circle"
-              style={{ marginTop: "3%" }}
-              color={this.isUserOnline(user) ? "green" : "red"}
-            />
-            <Image src={user.avatar} avatar />
-            <span>{user.name}</span>
-          </Menu.Item>
-        ))}
-      </Menu.Menu>
+        <Menu.Menu
+          style={{ maxHeight: "30vh", minHeight: "20vh", overflow: "auto" }}
+        >
+          {this.props.users.map(user => (
+            <Menu.Item
+              key={user.uid}
+              active={user.uid === activePrivateMessage}
+              onClick={() => this.privateMessage(user)}
+              style={{ fontStyle: "italic", fontSize: 18 }}
+            >
+              {/*<Icon
+                name="circle"
+                style={{ marginTop: "3%" }}
+                color={this.isUserOnline(user) ? "green" : "red"}
+              />*/}
+              <Image src={user.avatar} avatar />
+              <span>{user.name}</span>
+            </Menu.Item>
+          ))}
+        </Menu.Menu>
+      </Aux>
     );
   }
 }
 
+const mapStateToProps = state => ({ users: state.users.users });
+
 export default connect(
-  null,
-  { setCurrentRoom, setPrivateMessage }
+  mapStateToProps,
+  { setCurrentRoom, setPrivateMessage, fetchUsers }
 )(PrivateMessages);

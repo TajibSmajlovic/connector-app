@@ -115,28 +115,42 @@ class Workspace extends Component {
     return workplace.map(work => {
       if (work.password !== false) {
         return (
-          <List animated verticalAlign="middle" key={work.key}>
+          <div>
             <List.Item
-              style={{ color: "#1e0425", fontWeight: "bold", fontSize: 30 }}
+              style={{
+                color: "#1e0425",
+                fontWeight: "bold",
+                fontSize: 30,
+                marginTop: "4%"
+              }}
             >
-              <List.Icon name="lock" />
-              {work.name}
+              <List.Icon name="lock" /> {"  "} {work.name}
             </List.Item>
-            <List.Item>
-              <Input
-                focus
-                transparent
-                size="mini"
-                placeholder="Enter Password"
-                type="password"
-                name="workspacePassword"
-                onChange={this.handleChange}
-                onClick={this.loginToPrivateWorkspace(work.password, work.name)}
-                className={styles.PrivateWorkspaceInput}
-              />
-            </List.Item>
-            <hr />
-          </List>
+            <List
+              animated
+              verticalAlign="middle"
+              key={work.key}
+              style={{ marginTop: "1%" }}
+            >
+              <List.Item>
+                <Input
+                  focus
+                  transparent
+                  size="mini"
+                  placeholder="Enter Password"
+                  type="password"
+                  name="workspacePassword"
+                  onChange={this.handleChange}
+                  onClick={this.loginToPrivateWorkspace(
+                    work.password,
+                    work.name
+                  )}
+                  className={styles.PrivateWorkspaceInput}
+                />
+              </List.Item>
+              <hr />
+            </List>
+          </div>
         );
       }
     });
@@ -192,7 +206,7 @@ class Workspace extends Component {
 
             {privateWorkspace}
             <Button
-              color="teal"
+              style={{ backgroundColor: "#152336", color: "white" }}
               fluid
               size="large"
               onClick={this.createWorkspace}
@@ -204,10 +218,10 @@ class Workspace extends Component {
       );
     }
 
-    return publicWork.length > 0 ? (
+    return workspaces.length > 0 ? (
       <Aux>
         <Logo />
-        <Grid columns="two" textAlign="center">
+        <Grid columns="two" textAlign="center" style={{ height: 500 }}>
           <Grid.Row>
             <Grid.Column>
               <Menu attached="top" tabular>
@@ -237,7 +251,9 @@ class Workspace extends Component {
                 />
               </Menu>
 
-              <Segment attached="bottom">{workspace}</Segment>
+              <Segment attached="bottom" style={{ maxHeight: "25vh" }}>
+                {workspace}
+              </Segment>
             </Grid.Column>
           </Grid.Row>
         </Grid>

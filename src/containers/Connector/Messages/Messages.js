@@ -53,16 +53,14 @@ class Messages extends Component {
       this.addTypingListeners(room.id);
     }
 
-    if (this.messagesEnd) {
-      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-    }
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
+
+  componentWillMount() {}
 
   // Every time a new message is sent, it will automatically scroll to bottom
   componentDidUpdate(prevProps, prevState) {
-    if (this.messagesEnd) {
-      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-    }
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
   componentWillUnmount() {}
@@ -299,8 +297,11 @@ class Messages extends Component {
           isRoomStarred={isRoomStarred}
         />
 
-        <Segment clearing style={{ marginBottom: 0 }}>
-          <Comment.Group style={{ maxWidth: "70vw" }} className={style.message}>
+        <Segment clearing style={{ marginBottom: 0, maxHeight: "90vh" }}>
+          <Comment.Group
+            style={{ maxWidth: "70vw", maxHeight: "90vh" }}
+            className={style.message}
+          >
             {displayMessages()}
             {this.displayTypingUsers(typingUsers)}
             <div ref={node => (this.messagesEnd = node)} />

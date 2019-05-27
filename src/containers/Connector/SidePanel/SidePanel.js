@@ -20,7 +20,8 @@ class SidePanel extends Component {
           background: "#152336",
           fontSize: "1,2rem",
           width: "inherit",
-          padding: 0
+          padding: 0,
+          height: "100vh"
         }}
       >
         {/*Passing currentUser reference to the UserPanel*/}

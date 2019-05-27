@@ -267,7 +267,13 @@ class Rooms extends Component {
       <Aux>
         <Menu.Menu style={{ paddingBottom: "2em" }}>
           <Menu.Item>
-            <span style={{ fontSize: "18px", fontWeight: "bold" }}>
+            <span
+              style={{
+                fontSize: "1.5em",
+                fontWeight: "bold",
+                color: "rgba(255,255,255,.9)"
+              }}
+            >
               <Icon name="group" />
               ROOMS ({rooms.length})
             </span>
@@ -282,7 +288,9 @@ class Rooms extends Component {
             />
           </Menu.Item>
           <Menu.Item />
-          <div style={{ height: 300, overflow: "auto" }}>
+          <div
+            style={{ maxHeight: "25vh", minHeight: "20vh", overflow: "auto" }}
+          >
             {this.displayRooms(rooms)}
           </div>
         </Menu.Menu>

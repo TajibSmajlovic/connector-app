@@ -88,9 +88,22 @@ class StarredRoom extends Component {
     const { starredRooms } = this.state;
 
     return (
-      <Menu.Menu style={{ paddingBottom: "2em", textAlign: "center" }}>
+      <Menu.Menu
+        style={{
+          paddingBottom: "2em",
+          textAlign: "center",
+          maxHeight: "20vh",
+          overflow: "auto"
+        }}
+      >
         <Menu.Item>
-          <span style={{ fontSize: 18, fontWeight: "bold" }}>
+          <span
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              color: "rgba(255,255,255,.9)"
+            }}
+          >
             <Icon name="star" /> STARRED ({starredRooms.length})
           </span>{" "}
         </Menu.Item>

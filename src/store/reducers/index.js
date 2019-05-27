@@ -69,10 +69,27 @@ const roomReducer = (state = initialRoomState, action) => {
   }
 };
 
+const testState = {
+  users: []
+};
+
+const testReducer = (state = testState, action) => {
+  switch (action.type) {
+    case actionType.FETCH_USERS:
+      return {
+        ...state,
+        users: action.users
+      };
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   user: userReducer,
   room: roomReducer,
-  workspace: workspaceReducer
+  workspace: workspaceReducer,
+  users: testReducer
 });
 
 export default rootReducer;

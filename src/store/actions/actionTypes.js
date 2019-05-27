@@ -8,3 +8,5 @@ export const SET_PRIVATE_MESSAGE = "SET_PRIVATE_MESSAGE";
 export const SET_WORKSPACE = "SET_WORKSPACE";
 
 export const SET_USER_POSTS = "SET_USER_POSTS";
+
+export const FETCH_USERS = "FETCH_USERS";

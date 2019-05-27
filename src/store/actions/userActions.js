@@ -16,3 +16,10 @@ export const clearUser = () => {
     type: actionType.CLEAR_USER
   };
 };
+
+export const fetchUsers = users => {
+  return {
+    type: actionType.FETCH_USERS,
+    users
+  };
+};

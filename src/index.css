@@ -1,5 +1,6 @@
-body {
+html, body {
     background-image: linear-gradient(to right bottom, #090623, #0b0f26, #0e1528, #121a2a, #171f2c, #181f2d, #181f2d, #191f2e, #171a2d, #18152c, #1a0e29, #1e0425)!important;
-
+padding: 0!important;
+    margin: 0!important;
     box-sizing: border-box !important;
 }
